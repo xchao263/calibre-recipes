@@ -23,32 +23,32 @@ date_regexes = [
     r'Dec\s+(?P<day>\d{2}),\s+(?P<year>\d{4})'
 ]
 
-'''
+
 language = 'zh'
 site_url = 'http://www.infoq.com/cn/'
 title_prefix = 'InfoQ中国站'
 date_regexes = [
-    r'一月\s+(?P<day>\d{2}),\s+(?P<year>\d{4})',
-    r'二月\s+(?P<day>\d{2}),\s+(?P<year>\d{4})',
-    r'三月\s+(?P<day>\d{2}),\s+(?P<year>\d{4})',
-    r'四月\s+(?P<day>\d{2}),\s+(?P<year>\d{4})',
-    r'五月\s+(?P<day>\d{2}),\s+(?P<year>\d{4})',
-    r'六月\s+(?P<day>\d{2}),\s+(?P<year>\d{4})',
-    r'七月\s+(?P<day>\d{2}),\s+(?P<year>\d{4})',
-    r'八月\s+(?P<day>\d{2}),\s+(?P<year>\d{4})',
-    r'九月\s+(?P<day>\d{2}),\s+(?P<year>\d{4})',
-    r'十月\s+(?P<day>\d{2}),\s+(?P<year>\d{4})',
-    r'十一月\s+(?P<day>\d{2}),\s+(?P<year>\d{4})',
-    r'十二月\s+(?P<day>\d{2}),\s+(?P<year>\d{4})'
+    r'(?P<year>\d{4})年1月(?P<day>\d{1,2})日',
+    r'(?P<year>\d{4})年2月(?P<day>\d{1,2})日',
+    r'(?P<year>\d{4})年3月(?P<day>\d{1,2})日',
+    r'(?P<year>\d{4})年4月(?P<day>\d{1,2})日',
+    r'(?P<year>\d{4})年5月(?P<day>\d{1,2})日',
+    r'(?P<year>\d{4})年6月(?P<day>\d{1,2})日',
+    r'(?P<year>\d{4})年7月(?P<day>\d{1,2})日',
+    r'(?P<year>\d{4})年8月(?P<day>\d{1,2})日',
+    r'(?P<year>\d{4})年9月(?P<day>\d{1,2})日',
+    r'(?P<year>\d{4})年10月(?P<day>\d{1,2})日',
+    r'(?P<year>\d{4})年11月(?P<day>\d{1,2})日',
+    r'(?P<year>\d{4})年12月(?P<day>\d{1,2})日',
 ]
-'''
+
 
 # the sections to download
 sections = [ 'news', 'articles', 'interviews' ]
 
 # the range of date (both inclusive) to download
 lastDay = date.today() - timedelta(days = 1)
-date_range = (lastDay,lastDay)
+date_range = (date.today(),date.today())
 
 # the range of date to override for sections
 section_date_ranges = {
@@ -94,6 +94,7 @@ def parse_dateFromArrayContent(contents):
 	print 'parse_dateFromArrayContent'
 	for i in reversed(xrange(len(contents))):
 		print i
+        
 		d = parse_date(str(contents[i]))
 		
 		if d:
@@ -179,7 +180,6 @@ class InfoQ(BasicNewsRecipe):
                     author_span = item_div.find('span', { 'class': 'author' })
                     d = parse_dateFromArrayContent(author_span.contents)
                     
-                    print '>>> Date:', d
                     item['date'] = d
                     
                     print '>>> Item parsed: ', item
@@ -212,7 +212,8 @@ class InfoQ(BasicNewsRecipe):
         return index
     
     def postprocess_html(self, soup, first_fetch):
-        author_general = soup.find('span', { 'class': 'author' })
+        print "postprocess_htmlaa"
+        author_general = soup.find('span', { 'class': 'author_general' })
         author_general.em.extract()
     
         # the complete content
