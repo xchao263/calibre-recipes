@@ -25,11 +25,8 @@ date_regexes = [
 
 '''
 language = 'zh'
-
 site_url = 'http://www.infoq.com/cn/'
-
 title_prefix = 'InfoQ中国站'
-
 date_regexes = [
     r'一月\s+(?P<day>\d{2}),\s+(?P<year>\d{4})',
     r'二月\s+(?P<day>\d{2}),\s+(?P<year>\d{4})',
@@ -91,6 +88,15 @@ def generate_title(prefix):
             text = text + ' ' + sec[0].upper() + range2str(range, True)
     
     return text
+
+def parse_dateFromArrayContent(contents):
+	print 'parse_dateFromArrayContent'
+	for i in xrange(len(contents)):
+		print i
+		d = parse_date(str(contents[i]))
+		
+		if d:
+			return d
 
 def parse_date(text):
     for i in xrange(len(date_regexes)):
@@ -170,8 +176,10 @@ class InfoQ(BasicNewsRecipe):
                     item['description'] = get_text(item_div.p)
 
                     author_span = item_div.find('span', { 'class': 'author' })
-                    date_text = str(author_span.contents[-1])
-                    item['date'] = parse_date(date_text)
+                    d = parse_dateFromArrayContent(author_span.contents)
+                    
+                    print '>>> Date:', d
+                    item['date'] = d
                     
                     print '>>> Item parsed: ', item
                     
@@ -203,7 +211,7 @@ class InfoQ(BasicNewsRecipe):
         return index
     
     def postprocess_html(self, soup, first_fetch):
-        author_general = soup.find('span', { 'class': 'author_general' })
+        author_general = soup.find('span', { 'class': 'author' })
         author_general.em.extract()
     
         # the complete content
