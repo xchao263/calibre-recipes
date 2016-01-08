@@ -47,7 +47,8 @@ date_regexes = [
 sections = [ 'news', 'articles', 'interviews' ]
 
 # the range of date (both inclusive) to download
-date_range = (date(2013, 6, 20), date(2013, 6, 22))
+lastDay = date.today() - timedelta(days = 1)
+date_range = (lastDay,lastDay)
 
 # the range of date to override for sections
 section_date_ranges = {
@@ -91,7 +92,7 @@ def generate_title(prefix):
 
 def parse_dateFromArrayContent(contents):
 	print 'parse_dateFromArrayContent'
-	for i in xrange(len(contents)):
+	for i in reversed(xrange(len(contents))):
 		print i
 		d = parse_date(str(contents[i]))
 		
